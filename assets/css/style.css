@@ -1,0 +1,23 @@
+.layer {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.background {
+    background-color: aqua;
+}
+
+.gamefield {
+    background-color: transparent;
+}
+
+.player {
+    background-color: transparent;
+}
+
+.menu {
+    background-color: rgba(0, 0, 0, 0.678);
+}
