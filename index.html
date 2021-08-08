@@ -24,8 +24,15 @@
     <div class="layer menu">
         hoi
     </div>
-    <script>
-        loadGame();
-    </script>
-</body>
+    <script type="text/javascript">
+        let ScriptTag = document.createElement('script');      
+        ScriptTag.onload    = function() { 
+                loadGame(); 
+            };
+       ScriptTag.src = 'assets/java/game.js'; 
+       document.body.appendChild(ScriptTag);
+
+      </script>
+
+  </body>
 </html>
