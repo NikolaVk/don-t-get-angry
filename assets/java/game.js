@@ -39,6 +39,44 @@ function theGame(playfieldLayer, playerLayer, popupLayer)
     }
 
 
+function pawnSpots(spotType, spotPosition)
+{
+    this.type           = SpotType;
+    this.position       = spotPosition;
+}
+
+function board()
+{
+
+    let spotCoords       = [[100, 50], 
+                            [120, 50]];
+
+    this.circuit_spots      = new [];
+    this.home_spots         = new [];
+    this.start_spots        = new [];
+
+
+
+    for (let index = 0; index < 40; index++)
+     {
+            let spot        = new pawnSpots(1, index);
+            this.circuit_spots.push(spot);
+    }
+    for (let index = 0; index < 16; index++)
+    {
+        let spot        = new pawnSpots(2, index);
+        this.home_spots.push(spot);
+    }
+    for (let index = 0; index < 16; index++)
+    {
+        let spot        = new pawnSpots(3, index);
+        this.start_spots.push(spot);
+    }
+
+    this.dice               = null; 
+}
+
+
 
 function showError(ErrorMessage)
     {
