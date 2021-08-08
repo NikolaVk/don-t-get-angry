@@ -6,18 +6,18 @@
     bottom: 0px;
 }
 
-.background {
+#background {
     background-color: aqua;
 }
 
-.gamefield {
+#gamefield {
     background-color: transparent;
 }
 
-.player {
+#player {
     background-color: transparent;
 }
 
-.menu {
+#smenu {
     background-color: rgba(0, 0, 0, 0.678);
 }
