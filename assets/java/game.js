@@ -1,8 +1,5 @@
 
-
-let el_playfield        = null;
-let el_player           = null;
-let el_popup            = null;
+let game                = null;
 
 
 
@@ -17,9 +14,30 @@ function loadGame()
        return false;
    }
 
-   el_playfield.innerHTML         = "We have a playfield element";
+   game         = new theGame(el_playfield, el_player, el_popup);
+   if (game == null)
+   {
+       showError("Internal error");
+       return false;
+   }
+   game.createGameField();
 
 }
+
+function theGame(playfieldLayer, playerLayer, popupLayer)
+    {
+
+
+        this.el_playfield        = playfieldLayer;
+        this.el_player           = playerLayer;
+        this.el_popup            = popupLayer;
+        this.createGameField     = function()
+        {
+        alert("Creating gamefield");
+        }
+
+    }
+
 
 
 function showError(ErrorMessage)
