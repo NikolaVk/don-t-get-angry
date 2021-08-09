@@ -1,5 +1,10 @@
 
 let game                = null;
+let scaling             = 80;
+let pawnPosSize         = 20;
+let pawnPosBorder       = 2;
+let pawnPosbaseColor    = "white";
+let pawnPosColors       = ["rgb(255,0,0)", "rgb(0,255,0)", "rgb(0,0,255)", "rgb(255,255,0)"];
 
 
 
@@ -35,22 +40,65 @@ function theGame(playfieldLayer, playerLayer, popupLayer)
         this.board               = new playfield(playfieldLayer);
         this.createGameField     = function()
         {
-        alert("Creating gamefield");
-        }
+        this.board.init(this.el_playfield);
+        };
+
+
 
         this.draw               = function()
             {
             this.board.draw(); 
-            }
+            };
 
     }
 
 
-function pawnSpots(spotType, spotPosition, coordX, coordY)
+function pawnSpots(spotType, spotIndex, parentElement, coordX, coordY)
 {
     this.type           = spotType;
-    this.position       = spotPosition;
+    this.index          = spotIndex;
     this.coords         = {x: coordX, y: coordY};
+    if ((spotIndex % 10) != 0)
+        {
+         this.color          = pawnPosbaseColor;
+        }
+    else 
+        {
+         this.color          = pawnPosColors[parseInt(spotIndex / 10)];
+        }
+   
+    this.el_parent         = parentElement; 
+    this.el_element        = null;
+    if (this.el_parent == null)
+    {
+        console.log("pawnSpots: no parent element");
+   //     showError("Internal error");
+        return false;        
+    }
+
+    this.init           = function()
+    {
+        if (this.el_parent == null)
+        {
+            console.log("pawnSpots: no parent element");
+       //     showError("Internal error");
+            return false;        
+        }
+         this.el_element        = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+        this.el_element.setAttribute("cx", this.coords.x * scaling);
+        this.el_element.setAttribute("cy", (10 - this.coords.y) * scaling);
+        this.el_element.setAttribute("r", pawnPosSize);
+        this.el_element.setAttribute("stroke", "black");
+        this.el_element.setAttribute("stroke-width", pawnPosBorder);
+          this.el_element.setAttribute("fill", this.color);
+//        this.el_element.className      = "pawnposition";
+          this.el_parent.appendChild(this.el_element);
+     
+    };
+    this.draw           = function()
+    {
+
+    };
 }
 
 function playfield(el_playfield)
@@ -102,33 +150,36 @@ function playfield(el_playfield)
     this.circuit_spots      =  [];
     this.home_spots         =  [];
     this.start_spots        =  [];
-
-
-
-    for (let index = 0; index < 40; index++)
-     {
-            let spot        = new pawnSpots(1, index, spotCoords[index][0], spotCoords[index][1]);
-            this.circuit_spots.push(spot);
-    }
-    for (let index = 0; index < 16; index++)
-    {
-        let spot        = new pawnSpots(2, index);
-        this.home_spots.push(spot);
-    }
-    for (let index = 0; index < 16; index++)
-    {
-        let spot        = new pawnSpots(3, index);
-        this.start_spots.push(spot);
-    }
-
     this.dice               = null; 
 
+    this.init               = function()
+        {
+    
+        for (let index = 0; index < 40; index++)
+           {
+                let spot        = new pawnSpots(1, index, this.el_canvas, spotCoords[index][0], spotCoords[index][1]);
+                this.circuit_spots.push(spot);
+                spot.init();
+            }
+        for (let index = 0; index < 16; index++)
+            {
+            let spot        = new pawnSpots(2, index);
+            this.home_spots.push(spot);
+            }
+        for (let index = 0; index < 16; index++)
+            {
+            let spot        = new pawnSpots(3, index);
+            this.start_spots.push(spot);
+            }
+        
+        }; // init function
+
+ 
     this.draw               = function()
     {
-        alert("Drawing playfield");
 
 
-    }
+    }; // draw function
 }
 
 

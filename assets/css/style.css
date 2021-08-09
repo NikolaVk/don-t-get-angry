@@ -13,6 +13,11 @@
 #gamefield {
     background-color: transparent;
 }
+#gamefield_canvas
+{
+    width: 100%;
+    height: 100%;
+}
 
 #player {
     background-color: transparent;
