@@ -3,7 +3,7 @@ let game                = null;
 let scaling             = 80;
 let pawnPosSize         = 20;
 let pawnPosBorder       = 2;
-let canvasTopOffset     = 40;
+let canvasTopOffset     = 110;
 let pawnXoffset         = -42;
 let pawnYoffset         = -60;
 let pawnScale           = 0.019;
@@ -14,7 +14,6 @@ let pawnImages          = ["assets/images/pawn-blue.png", "assets/images/pawn-re
 let diceScale           = 0.046;
 let diceImages          = ["assets/images/dice-1.png", "assets/images/dice-2.png", "assets/images/dice-3.png", 
                            "assets/images/dice-4.png", "assets/images/dice-5.png", "assets/images/dice-6.png"];
-
 let spotCoords       = [[4, 0], 
                            [4, 1],
                            [4, 2],
@@ -95,16 +94,22 @@ let startSpotCoords  = [[0,0],
 
 
 
+
 function loadGame()
 {
+
+    // get the playfield DOM elements
     let el_canvas     = document.getElementById('gamefield_canvas');
     let el_playfield     = document.getElementById('gamefield_layer');
-   let el_player        = document.getElementById('player_layer');
+    let el_player        = document.getElementById('player_layer');
     if ((el_canvas == null) || (el_playfield == null) || (el_player == null))
    {
        showError("Internal error");
        return false;
    }
+
+
+
 
    el_canvas.addEventListener('click', function(e) {
         	let clickedElement = e.target;
@@ -140,6 +145,14 @@ function loadGame()
    // show the menu
    showMenu();
 
+}
+
+function playerSelectionButtonClicked(sender, playerid, buttonid)
+{
+    if (game != null) 
+    {
+    game.setPlayerType(playerid, buttonid);  
+    }
 }
 
 function startGame()
@@ -196,15 +209,40 @@ function theGame(playfieldLayer, playerLayer)
             var thePlayer      = new player(index, this.el_player);
             this.players.push(thePlayer);
             thePlayer.init();
-        }
 
-        this.theDice.init();
+            }
+
+            // set defaults for the players
+            this.players[0].setPlayerType(2);
+            this.players[1].setPlayerType(3);
+            this.players[2].setPlayerType(3);
+            this.players[3].setPlayerType(3);
+
+            this.theDice.init();
 
         };
 
 
+        this.setPlayerType      = function (playerid, playerType)
+        {
+            if ((playerid >= 1) && (playerid <= 4) && (this.players.length >= playerid))
+            {
+                this.players[playerid - 1].setPlayerType(playerType);   
+            }
+        };
+
         this.start              = function()
         {
+
+            // todo: perform sanity checks if everything is here and we can start the game
+            if (!this.isOK())
+            {
+                return false;
+            }
+
+
+
+
             this.state               = 0;    
             this.activePlayer        = 0;
             this.theDice.reset();
@@ -251,7 +289,27 @@ function theGame(playfieldLayer, playerLayer)
                 }
         };
 
-    }
+
+        this.isOK               = function()
+        {
+            if (this.players.length != 4)
+                {
+                    return false;
+                }
+             for (let index; index < 4; index++)
+            {
+                // check if the player configs are OK
+                if (!this.players.isOK())
+                {
+                    return false;
+                }
+            }
+            return true;
+        }; // isOK (function)
+    } // theGame object
+
+
+
 function dice(parentElement)
     {
         let dicePositions       = [[100, 540], [100, 130], [500, 130], [500, 540]];
@@ -328,7 +386,7 @@ function dice(parentElement)
                 this.el_element.setAttribute("href", diceImages[this.state - 1]);                   
             }
        };
-   }
+   } // dice object
 
 function redrawDice()
    {
@@ -339,9 +397,11 @@ function player(playerID, parentElement)
     {
         this.playerindex        = playerID;
         this.el_parent          = parentElement; 
+        this.playertype         = 0;
         this.pawns              = [];
         this.state              = 0;
         this.lastThrow          = 0;
+        this.config             = new playerconfigs(playerID);
 
         if (this.el_parent == null)
         {
@@ -366,6 +426,12 @@ function player(playerID, parentElement)
             }
              
         };
+
+        this.setPlayerType      = function(type)
+            {
+                this.playertype         = type;
+                this.config.updatePlayerType(this.playertype);
+            };
  
         this.reset              = function()
         {
@@ -416,7 +482,69 @@ function player(playerID, parentElement)
             }
   
         };
-       }
+ 
+        this.isOK               = function()
+        {
+            if (!this.config.isOK())
+                {
+                    return false;
+                }
+             return true;
+        };
+
+
+    } // player object
+
+
+ function playerconfigs(playerID)
+    {
+        this.playerindex                = playerID;
+        this.el_typebutton_empty        = document.getElementById("playerempty_" + (playerID + 1));
+        this.el_typebutton_human        = document.getElementById("playerhuman_" + (playerID + 1));
+        this.el_typebutton_computer     = document.getElementById("playercomputer_" + (playerID + 1));
+        this.el_playername              = document.getElementById("playername_" + (playerID + 1));
+    
+        this.updatePlayerType   = function(newPlayerType)
+        {
+                if (newPlayerType == 1)
+                {
+                    // player is disabled
+                    this.el_typebutton_empty.classList.add("playerselbutton_selected");
+                    this.el_typebutton_human.classList.remove("playerselbutton_selected");
+                    this.el_typebutton_computer.classList.remove("playerselbutton_selected");
+                    this.el_playername.classList.add("playername_disabled");
+                }
+                else if (newPlayerType == 2)
+                {
+                    // player is human
+                    this.el_typebutton_empty.classList.remove("playerselbutton_selected");
+                    this.el_typebutton_human.classList.add("playerselbutton_selected");
+                    this.el_typebutton_computer.classList.remove("playerselbutton_selected");
+                    this.el_playername.classList.remove("playername_disabled");
+                }
+                else if (newPlayerType == 3)
+                {
+                    // player is computer
+                    this.el_typebutton_empty.classList.remove("playerselbutton_selected");
+                    this.el_typebutton_human.classList.remove("playerselbutton_selected");
+                    this.el_typebutton_computer.classList.add("playerselbutton_selected");
+                    this.el_playername.classList.add("playername_disabled");
+                }
+        };
+
+        this.isOK               = function()
+        {
+            if ((this.el_typebutton_empty == null) || 
+                (this.el_typebutton_human == null) ||
+                (this.el_typebutton_computer == null) ||
+                (this.el_playername == null))
+                {
+                    return false;
+                }
+             return true;
+        };
+ }
+    
 
 function pawn(playerID, pawnIndex, parentElement)
 {
@@ -559,7 +687,7 @@ function pawn(playerID, pawnIndex, parentElement)
          setTimeout(redrawPawn, 100, this.ownRef);
         }
    };
-}
+} // pawn object
 
 function redrawPawn(pawnRef)
    {
@@ -629,7 +757,7 @@ function pawnSpots(spotType, spotIndex, parentElement, coordX, coordY)
     {
 
     };
-}
+} // pawnSpots object
 
 function playfield(el_playfield)
 {
@@ -671,7 +799,7 @@ function playfield(el_playfield)
 
 
     }; // draw function
-}
+} // playfield object
 
 
 
