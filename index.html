@@ -11,11 +11,12 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Don't-get-Angry</title>
 </head>
-<body>
+<body onresize="javascript:sizeCanvas();">
     <div id="background" class="layer">
     </div>
     <div id="gamefield" class="layer">
              <svg id="gamefield_canvas"  viewbox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+                <image href="assets/images/milkyway-board.jpg" transform="scale( 0.278241514 0.278241514) translate(-909, 0)"></image>
                 <g id="gamefield_layer"></g>
                 <g id="player_layer"></g>
             </svg>
