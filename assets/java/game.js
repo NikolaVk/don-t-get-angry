@@ -14,13 +14,18 @@ let diceTextYOffset     = 130;
 let diceTextScale       = 3;
 let diceTextColor       = "rgb(255,255,255)";
 let pawnPosbaseColor    = "white";
-let pawnPosColors       = ["rgb(0,0,255)", "rgb(255,0,0)", "rgb(0,255,0)", "rgb(255,255,0)"];
+let pawnPosColors       = ["rgb(13,10,193)", "rgb(227,6,19)", "rgb(8,221,51)", "rgb(229,253,13)"];
 let pawnImages          = ["assets/images/pawn-blue.png", "assets/images/pawn-red.png", "assets/images/pawn-green.png", "assets/images/pawn-yellow.png"];
 let diceScale           = 0.10;
 let diceImages          = ["assets/images/dice-1.png", "assets/images/dice-2.png", "assets/images/dice-3.png", 
                            "assets/images/dice-4.png", "assets/images/dice-5.png", "assets/images/dice-6.png"];
-let dicePositions       = [[150, 550], [150, 150], [550, 150], [550, 550]];
+let dicePositions       = [[125, 525], [125, 125], [575, 125], [575, 525]];
  
+let playerNameCoords    = [[70, 400],[70, 120],[430, 120],[430, 400]];
+let playerTextColor     = ["rgb(13,10,193)", "rgb(227,6,19)", "rgb(8,221,51)", "rgb(229,253,13)"];
+let playerNameScale     = 2;
+
+
 let spotCoords       = [[4, 0], 
                            [4, 1],
                            [4, 2],
@@ -603,6 +608,7 @@ function player(playerID, parentElement, playerName)
     {
         this.playerindex        = playerID;
         this.el_parent          = parentElement; 
+        this.el_playername      = null;
         this.playername         = playerName;
         this.playertype         = 0;
         this.pawns              = [];
@@ -638,9 +644,17 @@ function player(playerID, parentElement, playerName)
                 this.pawns.push(thePawn);
                 thePawn.init();
             }
+            this.el_playername            = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            this.el_playername.innerHTML  = "Player"; 
+            this.el_playername.setAttribute("x", playerNameCoords[this.playerindex][0]);
+            this.el_playername.setAttribute("y", playerNameCoords[this.playerindex][1]);
+            this.el_playername.setAttribute("text-anchor", "middle");
+            this.el_playername.setAttribute("fill", playerTextColor[this.playerindex]);
              
+            this.el_playername.setAttribute("transform", "scale(" + playerNameScale + " " + playerNameScale + ")");
+             this.el_parent.appendChild(this.el_playername);
+         
         };
-
 
         this.getNumPawnsAtHome  = function()
         {
@@ -711,8 +725,8 @@ function player(playerID, parentElement, playerName)
             // get config
             this.playertype     = this.config.readPlayerType();
             this.playername     = this.config.readPlayerName();
-
-
+            // also show the name on the screen
+            this.el_playername.innerHTML  = this.playername; 
 
             this.state              = 0; 
             for (let index = 0; index < 4; index++)
