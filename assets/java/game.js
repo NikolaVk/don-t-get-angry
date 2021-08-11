@@ -4,6 +4,7 @@ let scaling             = 80;
 let pawnPosSize         = 20;
 let pawnPosBorder       = 2;
 let canvasTopOffset     = 110;
+let canvasLeftOffset    = 100;
 let pawnXoffset         = -42;
 let pawnYoffset         = -60;
 let pawnScale           = 0.019;
@@ -133,6 +134,9 @@ function loadGame()
                 
             });
 
+
+    sizeCanvas();
+
    game         = new theGame(el_playfield, el_player);
    if (game == null)
    {
@@ -146,6 +150,27 @@ function loadGame()
    showMenu();
 
 }
+
+function sizeCanvas()
+    {
+        let el_canvas     = document.getElementById('gamefield_canvas');
+     
+    if (window.innerWidth > window.innerHeight)
+        {
+        el_canvas.style.width         = window.innerHeight + 'px';
+        el_canvas.style.height         = window.innerHeight + 'px';
+        el_canvas.style.left          = ((window.innerWidth - window.innerHeight) / 2)  + 'px';
+        el_canvas.style.top          = 0  + 'px';
+    }
+       else
+        {
+        el_canvas.style.width           = window.innerWidth + 'px';
+        el_canvas.style.height         = window.innerWidth + 'px';
+        el_canvas.style.left          = 0  + 'px';
+        el_canvas.style.top          = ((window.innerHeight - window.innerWidth) / 2)  + 'px';
+        }
+    }
+
 
 function playerSelectionButtonClicked(sender, playerid, buttonid)
 {
@@ -266,8 +291,32 @@ function theGame(playfieldLayer, playerLayer)
         this.throwDice          = function()
         {
             let diceValue   = this.theDice.throwDice();
-            this.players[this.activePlayer].setState(1, diceValue);
-        }
+            if (diceValue === false)
+            {
+                // dice not in the correct state
+                return false;
+            }
+
+            // perform the checking what we need to do
+            let numSelectedPawns = this.players[this.activePlayer].setState(1, diceValue);
+            if (numSelectedPawns == 0)
+            {
+                // no pawn selected, so go to the next player
+                // Todo: this should be one function because there are muitiple spots to continue to the next player
+                if (!this.selectNexPlayer())
+                {
+                   // seems the game is over
+
+                   return;
+                }
+                else
+                {
+                   this.theDice.currentPlayer       = this.activePlayer;
+                }
+                this.theDice.state               = 0; 
+                this.theDice.draw();
+            }
+        };
 
         this.pawnSelected          = function(clickedElement)
         {
@@ -275,20 +324,62 @@ function theGame(playfieldLayer, playerLayer)
             let pawnID          = parseInt(clickedElement.getAttribute("pawnid"));
             if (playerID == this.activePlayer)
                 {
-                   this.players[this.activePlayer].pawnSelected(pawnID);   
-                   // todo: check what really happened
-                   this.activePlayer++;
-                   if (this.activePlayer > 3)
-                   {
-                    this.activePlayer       = 0;
-                   }
-                   this.theDice.currentPlayer       = this.activePlayer;
+                    // get the new position of the pawn
+                   let newPawnPos   = this.players[this.activePlayer].pawnSelected(pawnID);   
+
+                    // check if the new position was occupied by another player
+                    for (let index = 0; index < 4; index++)
+                    {
+                        if (index != this.activePlayer)
+                            {
+                            let pawnIndex = this.players[index].getPawnIndexOnPosition(newPawnPos);
+                            if (pawnIndex >= 0)
+                            {
+                                // this pawn has to move
+                                this.players[index].putPawnBackInWaiting(pawnIndex);
+                            }
+                            }
+                    }
+                    
+                    if (this.theDice.state != 6)
+                        {
+                         if (!this.selectNexPlayer())
+                         {
+                            // seems the game is over
+
+                            return;
+                         }
+                         else
+                         {
+                            this.theDice.currentPlayer       = this.activePlayer;
+                         }
+                       }
                    this.theDice.state               = 0; 
                    this.theDice.draw();
 
                 }
         };
 
+        this.selectNexPlayer    = function()
+        {
+                 // next player
+            let playerIndex;
+            for (playerIndex = 1; playerIndex <= 4; playerIndex++)
+            {
+                let index = this.activePlayer + playerIndex;
+                while (index >= 4)
+                {
+                    index       -= 4;
+                }
+                if (this.players[index].isActive())
+                {
+                    this.activePlayer           = index;  
+                    return true;
+                }
+            } 
+            return false;               
+
+        };
 
         this.isOK               = function()
         {
@@ -312,7 +403,7 @@ function theGame(playfieldLayer, playerLayer)
 
 function dice(parentElement)
     {
-        let dicePositions       = [[100, 540], [100, 130], [500, 130], [500, 540]];
+        let dicePositions       = [[100, 500], [100, 90], [500, 90], [500, 500]];
 
         this.el_parent          = parentElement; 
         this.currentPlayer      = 0;
@@ -353,11 +444,11 @@ function dice(parentElement)
             {
             if (this.state == 0)
                 {
-                    this.state      = parseInt(Math.random() * 5) + 1;
-                }
-                
+                this.state      = parseInt(Math.random() * 5.99999999999) + 1;           
                 this.draw();
                 return this.state;
+                }
+            return false;
             };
 
         this.draw           = function()
@@ -366,8 +457,8 @@ function dice(parentElement)
             let y = -1000;
             if (this.state >= 0)
             {
-            x = dicePositions[this.currentPlayer][0];
-            y = dicePositions[this.currentPlayer][1];
+            x = dicePositions[this.currentPlayer][0] + canvasLeftOffset;
+            y = dicePositions[this.currentPlayer][1] + canvasTopOffset;
             }
             this.el_element.setAttribute("transform", "translate(" + x + " " + y + ") scale(" + diceScale + " " + diceScale + ")");
 
@@ -400,7 +491,13 @@ function player(playerID, parentElement)
         this.playertype         = 0;
         this.pawns              = [];
         this.state              = 0;
+        // states:
+        //  0 = waiting
+        //  1 = Dice is thrown (need selection)
+        //  2 = Done
+        //  3 = Disabled
         this.lastThrow          = 0;
+        this.startPosIndex      = this.playerindex * 10;
         this.config             = new playerconfigs(playerID);
 
         if (this.el_parent == null)
@@ -427,6 +524,19 @@ function player(playerID, parentElement)
              
         };
 
+        this.isActive           = function()
+        {
+            if ((this.state == 2) || (this.state == 3))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+        };
+
+
         this.setPlayerType      = function(type)
             {
                 this.playertype         = type;
@@ -446,32 +556,149 @@ function player(playerID, parentElement)
 
         this.setState       = function(newState, diceValue)
         {
+
+            let pawnSelected        = 0;
+            this.state              = newState;
             if (newState == 1)
             {
+                // dice has been thrown
                 this.lastThrow      = diceValue;
-            }
+ 
+  
 
-            this.state              = newState;
-            for (let index = 0; index < 4; index++)
+                for (let index = 0; index < 4; index++)
+                {
+                    if (this.pawns[index].positionType == 1)
+                    {
+                    // calculate the new position this pawn will get
+                    let newPawnPos  = this.getNewPawnPostion(index, this.lastThrow);
+
+                        
+                        // check if we have another pawn on this position
+                        if ((newPawnPos.positiontype != 1) || (this.getPawnIndexOnPosition(newPawnPos.position) < 0) )
+                        {
+                        this.pawns[index].setState(newState);
+                        pawnSelected++;
+                        }
+                    }
+                    else if ((this.lastThrow == 6) && (this.canPlaceNewPawn()))
+                    {
+                        this.pawns[index].setState(newState);   
+                        pawnSelected++;                   
+                    }
+                }
+            
+            }
+            else
             {
-                if (this.pawns[index].positionType == 1)
+                for (let index = 0; index < 4; index++)
                 {
                 this.pawns[index].setState(newState);
                 }
             }
+
             this.draw();
 
-            return this.state;
+            return pawnSelected;
        }
+
+    this.getNewPawnPostion              = function(pawnIndex, dicevalue)
+    {
+        let newPawnPos      = this.pawns[pawnIndex].position + this.lastThrow;
+        let newPawnPosType  = 1;
+        if (newPawnPos > 39)
+            {
+                newPawnPos      -= 40;
+            }
+        // check if we want to move the pawn into the house
+        if ((this.pawns[pawnIndex].position < this.startPosIndex) && (newPawnPos >= this.startPosIndex))
+        {
+            newPawnPos     = newPawnPos - this.startPosIndex;
+            newPawnPosType = 2;
+            // todo: do some magic to calculate the correct spot 
+        }
+        console.log('new possible pawn pos player: ' + this.playerindex + ',type: ' + newPawnPosType + ', pos: ' + newPawnPos);
+        return {position: newPawnPos, positiontype: newPawnPosType};
+    };
+  
+     this.getPawnIndexOnPosition        = function(pawnPos)
+     {
+        for (let index = 0; index < 4; index++)
+        {
+            if ((this.pawns[index].positionType == 1) && (this.pawns[index].position == pawnPos))
+            {
+                console.log('Pawn ' + index + ' of player ' + this.playerindex + ' is on position ' + pawnPos);
+                return index;
+            }
+        }
+        // no pawn on this spot
+        return -1;
+     };
+      this.putPawnBackInWaiting         = function (pawnIndex)
+      {
+        for (let freeWaitingSpot = 0; freeWaitingSpot < 4; freeWaitingSpot++)
+            {    
+            let index;          ;
+            for (index = 0; index < 4; index++)
+            {
+                if ((this.pawns[index].positionType == 3) && (this.pawns[index].position == (freeWaitingSpot + (this.playerindex * 4))))
+                {
+                    break;
+                }
+            }
+            if (index >= 4)
+            {
+                // spot is free
+                this.pawns[pawnIndex].positionType          = 3;
+                this.pawns[pawnIndex].position              = freeWaitingSpot;
+                this.pawns[pawnIndex].draw();
+                return true;
+            }
+        }
+       return false;
+      };
+       
+
+  
+  
+       this.canPlaceNewPawn     = function()
+        {
+             for (let index = 0; index < 4; index++)
+           {
+               if ((this.pawns[index].positionType == 1) && (this.pawns[index].position == this.startPosIndex))
+               {
+               return false;    
+               }
+              }
+            return true;
+            };
 
        this.pawnSelected          = function(pawnID)
         {
             if (this.pawns[pawnID].state == 1)
             {
                 // pawn is selectable
-                this.pawns[pawnID].setState(0); 
-                this.pawns[pawnID].moveSteps(this.lastThrow);
-            }
+                if (this.pawns[pawnID].positionType == 1)
+                    {
+                    let newPawnPos  = this.getNewPawnPostion(pawnID, this.lastThrow);
+                    this.pawns[pawnID].position     = newPawnPos.position;
+                    this.pawns[pawnID].positionType = newPawnPos.positiontype;
+                    }
+                else if (this.pawns[pawnID].positionType == 3)
+                {
+                    // pawn is still in the waiting room
+                    this.pawns[pawnID].position         = this.startPosIndex;
+                    this.pawns[pawnID].positionType     = 1;
+
+                    // reset the state of all pawns
+   
+                }
+            this.pawns[0].setState(0); 
+            this.pawns[1].setState(0); 
+            this.pawns[2].setState(0); 
+            this.pawns[3].setState(0); 
+           return this.pawns[pawnID].position;
+           }
         };
 
        this.draw           = function()
@@ -600,17 +827,6 @@ function pawn(playerID, pawnIndex, parentElement)
              this.draw();
           };
  
-          this.moveSteps    = function(steps)
-          {
-             this.position                  += steps;
-             if (this.position > 39)
-                {
-                    this.position       = 39; 
-                }
- 
-              // todo: implement move animation 
-              this.draw();
-           };
   
           this.setState       = function(newState)
             {
@@ -665,7 +881,7 @@ function pawn(playerID, pawnIndex, parentElement)
  //           y = ((10 - parseInt(this.position / 2)) * scaling);   
  //           }
         }
-        x   += pawnXoffset;
+        x   += pawnXoffset + canvasLeftOffset;
         y   += pawnYoffset + canvasTopOffset;
         if (this.state != 1)
         {
@@ -743,7 +959,7 @@ function pawnSpots(spotType, spotIndex, parentElement, coordX, coordY)
             return false;        
         }
          this.el_element        = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-        this.el_element.setAttribute("cx", this.coords.x * scaling);
+        this.el_element.setAttribute("cx", (this.coords.x * scaling) + canvasLeftOffset);
         this.el_element.setAttribute("cy", ((10 - this.coords.y) * scaling) + canvasTopOffset);
         this.el_element.setAttribute("r", pawnPosSize);
         this.el_element.setAttribute("stroke", "black");
