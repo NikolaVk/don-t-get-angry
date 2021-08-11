@@ -19,14 +19,14 @@ let pawnImages          = ["assets/images/pawn-blue.png", "assets/images/pawn-re
 let diceScale           = 0.10;
 let diceImages          = ["assets/images/dice-1.png", "assets/images/dice-2.png", "assets/images/dice-3.png", 
                            "assets/images/dice-4.png", "assets/images/dice-5.png", "assets/images/dice-6.png"];
-let dicePositions       = [[125, 525], [125, 125], [575, 125], [575, 525]];
+let dicePositions       = [[125, 510], [125, 125], [560, 125], [560, 510]];
  
-let playerNameCoords    = [[70, 400],[70, 120],[430, 120],[430, 400]];
+let playerNameCoords    = [[70, 390],[70, 120],[430, 120],[430, 390]];
 let playerTextColor     = ["rgb(13,10,193)", "rgb(227,6,19)", "rgb(8,221,51)", "rgb(229,253,13)"];
 let playerNameScale     = 2;
 
 
-let spotCoords       = [[4, 0], 
+let spotCoords       =    [[4, 0], 
                            [4, 1],
                            [4, 2],
                            [4, 3],
