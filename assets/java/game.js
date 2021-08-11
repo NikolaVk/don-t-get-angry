@@ -191,11 +191,14 @@ function playerSelectionButtonClicked(sender, playerid, buttonid)
     }
 }
 
+//-------------------------------------------------------------------------------------------------
+// startGame - starts the game
+//-------------------------------------------------------------------------------------------------
 function startGame()
     {
         game.start();
         hideMenu();
-    }
+    } // startGame
 
 //-------------------------------------------------------------------------------------------------
 // showRules - Shows the rule panel
@@ -207,6 +210,12 @@ function showRules()
         {
             el_Rules.style.display          = 'block';
         }     
+        let    el_Main         = document.getElementById('main');
+        if (el_Main != null)
+        {
+            el_Main.style.display          = "none";
+        }
+     
     } // showRules
 
 //-------------------------------------------------------------------------------------------------
@@ -218,7 +227,12 @@ function hideRules()
     if (el_Rules != null)
     {
         el_Rules.style.display          = 'none';
-    }  
+    }
+        let    el_Main         = document.getElementById('main');
+        if (el_Main != null)
+        {
+            el_Main.style.display          = "block";
+        }
     } // hideRules
 
 
@@ -241,6 +255,7 @@ function showWonPopup(playerName)
         showError("Internal error");
         return false;      
     }
+  
 
     el_wonpopup.style.display       = "block" ;
     } // showWonPopup
@@ -258,6 +273,11 @@ function showMenu()
         return false;
         
     }
+    let    el_Main         = document.getElementById('main');
+    if (el_Main != null)
+    {
+        el_Main.style.display          = "block";
+    }
 
     let el_wonpopup     = document.getElementById('wonpopup');
     if (el_wonpopup == null)
@@ -267,6 +287,7 @@ function showMenu()
     }
 
     el_wonpopup.style.display       = "none";
+    el_popup.style.display          = "block";
     el_popup.classList.add("menu_active");
     } // showMenu
 
@@ -282,8 +303,12 @@ function hideMenu()
          return false;
          
      }
- 
-     el_popup.classList.remove("menu_active");
+     let    el_Main         = document.getElementById('main');
+     if (el_Main != null)
+     {
+         el_Main.style.display          = "none";
+     }
+ el_popup.classList.remove("menu_active");
     } // hideMenu
 
 
@@ -302,6 +327,9 @@ function theGame(playfieldLayer, playerLayer)
         this.activePlayer        = 0;
         this.state               = 0;
 
+        //-------------------------------------------------------------------------------------------------
+        // theGame.createGameField - Game field createion function (called to create the game objects)
+        //-------------------------------------------------------------------------------------------------
         this.createGameField     = function()
         {
         this.board.init();
@@ -325,6 +353,9 @@ function theGame(playfieldLayer, playerLayer)
         };
 
 
+        //-------------------------------------------------------------------------------------------------
+        // theGame.setPlayerType - set the base player type. Used to set some defaults
+        //-------------------------------------------------------------------------------------------------
         this.setPlayerType      = function (playerid, playerType)
         {
             if ((playerid >= 1) && (playerid <= 4) && (this.players.length >= playerid))
@@ -333,6 +364,9 @@ function theGame(playfieldLayer, playerLayer)
             }
         };
 
+       //-------------------------------------------------------------------------------------------------
+        // theGame.start - starts the game
+        //-------------------------------------------------------------------------------------------------
         this.start              = function()
         {
 
@@ -343,17 +377,28 @@ function theGame(playfieldLayer, playerLayer)
             }
 
 
-            this.state               = 0;    
-            this.activePlayer        = 0;
+            this.state               = 0;
+
             this.theDice.reset();
             for (let index = 0; index < 4; index++)
-            {
+                {
                 this.players[index].reset();
+                }
+
+            // select the last player and use the selectnext to get the first valid player
+            this.activePlayer        = 3;
+            if (!this.selectNexPlayer())
+            {
+                // unable to select a player
+                return false;
             }
             this.theDice.setState(0, "Throw dice");
-         
-        };
 
+         };
+
+       //-------------------------------------------------------------------------------------------------
+        // theGame.draw - draw the game
+        //-------------------------------------------------------------------------------------------------
         this.draw               = function()
             {
             this.board.draw(); 
@@ -364,6 +409,9 @@ function theGame(playfieldLayer, playerLayer)
             this.theDice.draw();
                };
 
+         //-------------------------------------------------------------------------------------------------
+        // theGame.throwDice - throws the dice and takes the required actions
+        //-------------------------------------------------------------------------------------------------
         this.throwDice          = function()
         {
             let diceValue   = this.theDice.throwDice();
@@ -384,7 +432,7 @@ function theGame(playfieldLayer, playerLayer)
                     // Todo: this should be one function because there are muitiple spots to continue to the next player
                     if (!this.selectNexPlayer())
                         {
-                        // seems the game is over
+                        // seems we have to wait
 
                         return;
                         }
@@ -393,26 +441,56 @@ function theGame(playfieldLayer, playerLayer)
                         this.theDice.currentPlayer       = this.activePlayer;
                         }
                     }
+                    if (this.players[this.activePlayer].isComputer())
+                    {
+                        // we are a computer, so no selection allowed by the user
+                        return this.performComputerTurn(2);
+                    }
                     this.theDice.setState(0, "Throw dice");
 
                 }
+            else if (this.players[this.activePlayer].isComputer())
+            {
+                // the computer should select a pawn to move
+                return this.performComputerTurn(3);
+            }
             }; // throwDice (function)
 
+        //-------------------------------------------------------------------------------------------------
+        // theGame.pawnSelected - handler for when the user selects a pawn
+        //-------------------------------------------------------------------------------------------------
         this.pawnSelected          = function(clickedElement)
         {
+            if (this.players[this.activePlayer].isComputer())
+            {
+                // we are a computer, so no selection allowed by the user
+            return; 
+            }
+
             let playerID        = parseInt(clickedElement.getAttribute("playerid"));
             let pawnID          = parseInt(clickedElement.getAttribute("pawnid"));
-            if (playerID == this.activePlayer)
+
+            this.performMove(playerID, pawnID);
+  
+        }; 
+         //-------------------------------------------------------------------------------------------------
+        // theGame.pawnSelected - handler for when the user selects a pawn
+        //-------------------------------------------------------------------------------------------------
+        this.performMove          = function(playerID, pawnID)
+            {
+            if ((playerID == this.activePlayer) && (this.players[this.activePlayer].isPawnSelected(pawnID)))
                 {
                     // get the new position of the pawn
                    let newPawnPos   = this.players[this.activePlayer].pawnSelected(pawnID);   
 
                     // check if the new position was occupied by another player
+                    if (newPawnPos.positiontype == 1)
+                    {
                     for (let index = 0; index < 4; index++)
                     {
                         if (index != this.activePlayer)
                             {
-                            let pawnIndex = this.players[index].getPawnIndexOnPosition(newPawnPos, 1);
+                            let pawnIndex = this.players[index].getPawnIndexOnPosition(newPawnPos.position, 1);
                             if (pawnIndex >= 0)
                             {
                                 // this pawn has to move
@@ -420,6 +498,7 @@ function theGame(playfieldLayer, playerLayer)
                             }
                             }
                     }
+                }
                     
                     if (this.players[this.activePlayer].getNumPawnsAtHome() == 4)
                     {
@@ -432,7 +511,7 @@ function theGame(playfieldLayer, playerLayer)
                         {
                          if (!this.selectNexPlayer())
                          {
-                            // seems the game is over
+                            // seems we have to wait
 
                             return;
                          }
@@ -441,11 +520,18 @@ function theGame(playfieldLayer, playerLayer)
                             this.theDice.currentPlayer       = this.activePlayer;
                          }
                        }
-                   this.theDice.setState(0, "Throw dice");
+                       if (this.players[this.activePlayer].isComputer())
+                       {
+                           return this.performComputerTurn(0);
+                       }
+                       this.theDice.setState(0, "Throw dice");
                     }
                 }
         };
 
+        //-------------------------------------------------------------------------------------------------
+        // theGame.selectNexPlayer - select the next valid player
+        //-------------------------------------------------------------------------------------------------
         this.selectNexPlayer    = function()
         {
             // next player
@@ -463,13 +549,133 @@ function theGame(playfieldLayer, playerLayer)
                 if (this.players[index].isActive())
                 {
                     this.activePlayer           = index;  
+   
+                    if (this.players[this.activePlayer].isComputer())
+                    {
+                        return this.performComputerTurn(0);
+                    }
+         
                     return true;
                 }
             } 
+   
+   
             return false;               
 
         };
 
+
+       //-------------------------------------------------------------------------------------------------
+        // theGame.performComputerTurn - let the computer take a turn
+        //-------------------------------------------------------------------------------------------------
+        this.performComputerTurn            = function (step)
+        {
+
+            // TODO: implement some animations
+
+            // 1. Throw the dice
+            if (step == 0)
+                {
+
+                console.log('Computer player ' + this.activePlayer + ' throws the dice');
+                this.theDice.currentPlayer       = this.activePlayer;
+                this.theDice.setState(0, "Throw dice");
+                setTimeout(function(){ game.performComputerTurn(1);}, 500);
+                }
+              // 2. Really Throw the dice
+              else if (step == 1)
+                {
+                   console.log('Computer player ' + this.activePlayer + ' throws the dice (now for real)');
+                    this.throwDice();
+                }
+            // second throw
+            else if (step == 2)
+                {
+
+                console.log('Computer player ' + this.activePlayer + ' throws the dice (again)');
+                this.theDice.currentPlayer       = this.activePlayer;
+                this.theDice.setState(0, "Throw dice");
+                setTimeout(function(){ game.performComputerTurn(1);}, 500);
+                }
+          // Start a pawn selection
+          else if (step == 3)
+                {
+
+                console.log('Computer player ' + this.activePlayer + ' starts a pawn selection');
+                setTimeout(function(){ game.performComputerTurn(4);}, 1000);
+                }
+        // perform a pawn selection
+        else if (step == 4)
+            {
+
+                // determine if there is a move which kills an oponent
+                let foundPawnIndex      = -1;
+                let oponentPawnsInHome  = 0;
+                let pawnAtStart         = -1;
+                let pawnInHome          = -1;
+                let preferedPawnIndex   = -1;
+                let stepsToHome         = 40;
+ 
+                console.log('Computer player ' + this.activePlayer + ' starts a pawn selection determination');
+                for (let index = 0; index < 4; index++)
+                {
+                    if (this.players[this.activePlayer].isPawnSelected(index))
+                    {
+                        let newPawnPosition = this.players[this.activePlayer].getNewPawnPostion(index, this.players[this.activePlayer].lastThrow);
+                        console.log('Computer player ' + this.activePlayer + ' checks pawn on index ' + index );
+                        if ((newPawnPosition.positiontype == 1) && (newPawnPosition.position == this.players[this.activePlayer].startPosIndex))
+                        {
+                            pawnAtStart = index;
+                            console.log('Computer player ' + this.activePlayer + ' found a pawn to move from waiting to the board: ' + index);
+                            break;
+                        }
+                        if (newPawnPosition.positiontype == 2)
+                        {
+                            console.log('Computer player ' + this.activePlayer + ' found a pawn to move into home: ' + index);
+                            pawnInHome  = index;
+                            break;
+                        }
+
+                        // calculate the number of steps to come home
+                        if (newPawnPosition.positiontype == 1)
+                            {
+                            let stepToComeHome      = 40 - (((newPawnPosition.position + 40) - this.players[this.activePlayer].startPosIndex) % 40);
+                            if (stepToComeHome < stepsToHome)
+                                {
+                                    preferedPawnIndex           = index;
+                                    stepsToHome                 = stepToComeHome;
+                                    console.log('Computer player ' + this.activePlayer + ' found a pawn closer to home: ' + index +  " steps: " + stepsToHome);
+                                }
+                            }
+
+  
+                    }
+                }
+            console.log('Computer player ' + this.activePlayer + ' ends a pawn selection determination');
+            if (pawnAtStart >= 0)
+                {
+                this.performMove(this.activePlayer, pawnAtStart);
+                console.log('Computer player ' + this.activePlayer + ' moves pawn ' + pawnAtStart);
+            }
+            else if (pawnInHome >= 0)
+                {
+                this.performMove(this.activePlayer, pawnInHome);
+                console.log('Computer player ' + this.activePlayer + ' moves pawn ' + pawnInHome);
+                }
+            else if (preferedPawnIndex >= 0) 
+            {
+                this.performMove(this.activePlayer, preferedPawnIndex);
+                console.log('Computer player ' + this.activePlayer + ' moves pawn ' + preferedPawnIndex);
+                }
+ 
+  //           setTimeout(function(){ game.performComputerTurn(4);}, 1000);
+            }
+        };
+
+       //-------------------------------------------------------------------------------------------------
+        // theGame.isOK - check if we are ok to go
+        //-------------------------------------------------------------------------------------------------
+        // TODO: this should be extended
         this.isOK               = function()
         {
             if (this.players.length != 4)
@@ -490,6 +696,9 @@ function theGame(playfieldLayer, playerLayer)
 
 
 
+//-------------------------------------------------------------------------------------------------
+// dice - The dice object - Contains dice functionality and data
+//-------------------------------------------------------------------------------------------------
 function dice(parentElement)
     {
         this.el_parent          = parentElement; 
@@ -596,6 +805,9 @@ function dice(parentElement)
        };
    } // dice object
 
+//-------------------------------------------------------------------------------------------------
+// redrawDice - redraw timed routine for the dice (used for animation)
+//-------------------------------------------------------------------------------------------------
 function redrawDice()
    {
        game.theDice.draw();
@@ -654,6 +866,17 @@ function player(playerID, parentElement, playerName)
             this.el_playername.setAttribute("transform", "scale(" + playerNameScale + " " + playerNameScale + ")");
              this.el_parent.appendChild(this.el_playername);
          
+        };
+
+        this.isComputer         = function()
+        {
+            if (this.playertype == 3)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
         };
 
         this.getNumPawnsAtHome  = function()
@@ -719,6 +942,15 @@ function player(playerID, parentElement, playerName)
  
             }
 
+        this.isPawnSelected         = function(pawnID)
+        {
+            if (this.pawns[pawnID].state == 1)
+            {
+                return true;
+            }
+            return false;
+        };
+
         this.reset              = function()
         {
 
@@ -726,21 +958,36 @@ function player(playerID, parentElement, playerName)
             this.playertype     = this.config.readPlayerType();
             this.playername     = this.config.readPlayerName();
             // also show the name on the screen
-            this.el_playername.innerHTML  = this.playername; 
-
-            this.state              = 0; 
+            if (this.playertype == 1)
+                {
+                    this.state              = 2; 
+                    this.el_playername.innerHTML  = "Not playing";                   
+                }
+             else if (this.playertype == 2)
+                {
+                    this.state              = 0; 
+                    this.el_playername.innerHTML  = this.playername;                   
+                }
+            else
+                {
+                    this.state              = 0; 
+                    this.playername         = "Computer " + (this.playerindex + 1);
+                this.el_playername.innerHTML  = this.playername; 
+                }
+ 
             for (let index = 0; index < 4; index++)
             {
+                this.pawns[index].setState(this.state);
                 this.pawns[index].reset();
             }
             this.numDiceThrows          = 0;
 
 
             // set some easy start configuration
-            this.pawns[0].moveTo(1, ((this.playerindex * 10)+ 39) % 40);
-            this.pawns[1].moveTo(1, ((this.playerindex * 10)+ 38) % 40);
-            this.pawns[2].moveTo(1, ((this.playerindex * 10)+ 37) % 40);
-            this.pawns[3].moveTo(1, ((this.playerindex * 10)+ 36) % 40);
+//            this.pawns[0].moveTo(1, ((this.playerindex * 10)+ 39) % 40);
+//            this.pawns[1].moveTo(1, ((this.playerindex * 10)+ 38) % 40);
+//            this.pawns[2].moveTo(1, ((this.playerindex * 10)+ 37) % 40);
+//            this.pawns[3].moveTo(1, ((this.playerindex * 10)+ 36) % 40);
         };
 
         this.setState       = function(newState, diceValue)
@@ -775,6 +1022,15 @@ function player(playerID, parentElement, playerName)
                     }
                 }
             
+            }
+            else if (newState == 3)
+            {
+                // this player will be disabled
+                for (let index = 0; index < 4; index++)
+                {
+                this.pawns[index].setState(newState);
+                }
+              
             }
             else
             {           
@@ -909,7 +1165,7 @@ function player(playerID, parentElement, playerName)
             this.pawns[1].setState(0); 
             this.pawns[2].setState(0); 
             this.pawns[3].setState(0); 
-           return this.pawns[pawnID].position;
+           return {position: this.pawns[pawnID].position, positiontype: this.pawns[pawnID].positionType};
            }
         };
 
@@ -935,7 +1191,10 @@ function player(playerID, parentElement, playerName)
     } // player object
 
 
- function playerconfigs(playerID)
+ //-------------------------------------------------------------------------------------------------
+// playerconfigs - player config object. Used for the settting coming from the menu
+//-------------------------------------------------------------------------------------------------
+function playerconfigs(playerID)
     {
         this.playerindex                = playerID;
         this.el_typebutton_empty        = document.getElementById("playerempty_" + (playerID + 1));
@@ -946,7 +1205,7 @@ function player(playerID, parentElement, playerName)
 
         this.readPlayerType     = function()
         {
-            return  this.playerType ;
+            return  this.playerType;
         };
         this.readPlayerName     = function()
         {
@@ -1000,6 +1259,9 @@ function player(playerID, parentElement, playerName)
  }
     
 
+//-------------------------------------------------------------------------------------------------
+// pawn - player pawn object. Used for the pawn functionality. For each player there are four
+//-------------------------------------------------------------------------------------------------
 function pawn(playerID, pawnIndex, parentElement)
 {
     this.playerindex        = playerID;
@@ -1042,8 +1304,8 @@ function pawn(playerID, pawnIndex, parentElement)
 
         this.reset              = function()
         {
-            this.state              = 0; 
-         };
+            this.draw();
+        };
 
          this.moveTo              = function(posType, position)
          {
@@ -1063,53 +1325,42 @@ function pawn(playerID, pawnIndex, parentElement)
   
   
   
-          this.draw           = function()
-    {
+    this.draw           = function()
+        {
 
         let x = 0;
         let y = 0;
 
-        // position the pawn
-        if (this.positionType == 1)
-        {
-            x =  spotCoords[this.position][0] * scaling;
-            y =  (10 - spotCoords[this.position][1]) * scaling;
 
-        }
-        else if (this.positionType == 2)
+        if (this.state == 3)
         {
-            x =  homeSpotCoords[this.position][0] * scaling;
-            y =  (10 - homeSpotCoords[this.position][1]) * scaling;
+            // the pawn are not enabled, move them out of the playfield
+            x       = -100;
+            y       = -100;
         }
-       else if (this.positionType == 3)
-        {
-            x =  startSpotCoords[this.playerindex * 4 + this.position][0] * scaling;
-            y =  (10 - startSpotCoords[this.playerindex * 4 + this.position][1]) * scaling;
+        else
+            {
+            // position the pawn
+            if (this.positionType == 1)
+            {
+                x =  spotCoords[this.position][0] * scaling;
+                y =  (10 - spotCoords[this.position][1]) * scaling;
 
-            // start spot
- //           if (this.playerindex == 0)
- //           {
- //           x = parseInt(this.position % 2) * scaling;   
- //           y = ((10 - parseInt(this.position / 2)) * scaling);   
- //           }
- //           else if (this.playerindex == 1)
- //           {
- //           x = parseInt(this.position % 2) * scaling;   
- //           y = (parseInt(this.position / 2) * scaling);   
- //           }
- //           else if (this.playerindex == 2)
- //           {
- //           x = (parseInt(this.position % 2) + 9) * scaling;   
- //           y = (parseInt(this.position / 2) * scaling);   
- //           }
- //           else if (this.playerindex == 3)
- //           {
- //           x = (parseInt(this.position % 2) + 9) * scaling; 
- //           y = ((10 - parseInt(this.position / 2)) * scaling);   
- //           }
-        }
-        x   += pawnXoffset + canvasLeftOffset;
-        y   += pawnYoffset + canvasTopOffset;
+            }
+            else if (this.positionType == 2)
+            {
+                x =  homeSpotCoords[this.position][0] * scaling;
+                y =  (10 - homeSpotCoords[this.position][1]) * scaling;
+            }
+        else if (this.positionType == 3)
+            {
+                x =  startSpotCoords[this.playerindex * 4 + this.position][0] * scaling;
+                y =  (10 - startSpotCoords[this.playerindex * 4 + this.position][1]) * scaling;
+
+            }
+            x   += pawnXoffset + canvasLeftOffset;
+            y   += pawnYoffset + canvasTopOffset;
+            }
         if (this.state != 1)
         {
             this.animCounter        = 0;
@@ -1132,12 +1383,18 @@ function pawn(playerID, pawnIndex, parentElement)
    };
 } // pawn object
 
+//-------------------------------------------------------------------------------------------------
+// redrawPawn - Timed redraw routine for the pawn. Used for the pawn animations
+//-------------------------------------------------------------------------------------------------
 function redrawPawn(pawnRef)
    {
     pawnRef.draw();
-   }
+   } // redrawPawn
 
 
+//-------------------------------------------------------------------------------------------------
+// pawnSpots - pawnSpots object. Used for drawing all the playfield dot where a pawn can stand
+//-------------------------------------------------------------------------------------------------
 function pawnSpots(spotType, spotIndex, parentElement, coordX, coordY)
 {
     this.type           = spotType;
@@ -1202,6 +1459,10 @@ function pawnSpots(spotType, spotIndex, parentElement, coordX, coordY)
     };
 } // pawnSpots object
 
+
+//-------------------------------------------------------------------------------------------------
+// playfield - Playfield object - Used for drawing the base playfield (board)
+//-------------------------------------------------------------------------------------------------
 function playfield(el_playfield)
 {
 
@@ -1242,11 +1503,13 @@ function playfield(el_playfield)
 
 
     }; // draw function
+
 } // playfield object
 
-
-
+//-------------------------------------------------------------------------------------------------
+// showError - Show any errors to the user
+//-------------------------------------------------------------------------------------------------
 function showError(ErrorMessage)
     {
         alert("Error: " + ErrorMessage);
-    }
+    } // showError
