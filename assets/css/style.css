@@ -220,3 +220,14 @@ input{
     color:              white;
     border:              4px solid white;
 }
+
+#wonpopup
+    {
+        position: absolute;
+        left:           50%;
+        top:            10%;
+        margin-left:    -30%;
+        width:          60%;
+        background-color: salmon;
+        min-height: 200px;
+    }
