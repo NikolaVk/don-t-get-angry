@@ -147,7 +147,7 @@ function loadGame()
    game.draw();
 
    // show the menu
-   showMenu();
+   setTimeout(showMenu(), 3000);
 
 }
 
@@ -185,6 +185,33 @@ function startGame()
         game.start();
         hideMenu();
     }
+
+//-------------------------------------------------------------------------------------------------
+// showRules - Shows the rule panel
+//-------------------------------------------------------------------------------------------------
+function showRules()
+    {
+    let el_Rules            = document.getElementById('rules_panel');
+    if (el_Rules != null)
+        {
+            el_Rules.style.display          = 'block';
+        }     
+    } // showRules
+
+//-------------------------------------------------------------------------------------------------
+// hideRules - Hide the rule panel
+//-------------------------------------------------------------------------------------------------
+function hideRules()
+    {
+    let el_Rules            = document.getElementById('rules_panel');
+    if (el_Rules != null)
+    {
+        el_Rules.style.display          = 'none';
+    }  
+    } // hideRules
+
+
+
 
 function showMenu()
     {

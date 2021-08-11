@@ -22,6 +22,32 @@
             </svg>
     </div>
      <div id="menu" class="layer menu">
+        <div id="rules_panel" class="rules">
+            <div class="back_button" onclick="javascript:hideRules();">BACK</div>
+            <div id="rules_text">
+                <div id="rules_h1"><h1>RULES</h1></div>
+                <br>
+                <h2>Goal of the game</h2>
+                <p>The first player that get's all of his/her's four pawns into the pawns home base wins the game.</p>
+                <br>
+                <h2>How to play?</h2>
+                <img src="/assets/images/cpu.png"><p>Set this if you wish to play againss the computer</p>
+                <img src="/assets/images/human.png"><p>Set this if you wish to play with friends</p>
+                <img src="/assets/images/empty.png"><p>Here you can disable players</p>
+                <br>
+                <h2>Getting on the start line</h2>
+                <p>To get on the board you must throw a six. When all four pawns are in their starting position you may throw three times until you throw a six</p>
+                <br>
+                <h2>Crossing the board</h2>
+                <p>Dangers lukrs on the board as other players can kick you off the board and you have to start all over again</p>
+                <br>
+                <h2>Getting inside home base</h2>
+                <p>To get inside home base you can't throw higher than the spots avaliable. The more pawns are inside home base the harder it gets to get the next one in as the pawns can't stand on top of each other</p>
+                <br>
+                <h2>The winner</h2>
+                <p>The first player that gets all four pawns inside home base wins the game</p>
+            </div>
+        </div>
          <div id="main">
              <div id="logo"><img src="/assets/images/logo.png"></div>
             <div class="playerselectioncontainer">
@@ -61,9 +87,10 @@
                 </div>
             </div>
           <div id="button_startgame" class="button_main" onclick="javascript:startGame();">START GAME</div>
-         <div id="button_rules" class="button_main">RULES</div>
+         <div id="button_rules" class="button_main" onclick="javascript:showRules();">RULES</div>
         </div>
     </div>
+
     <script type="text/javascript">
         let ScriptTag = document.createElement('script');      
         ScriptTag.onload    = function() { 
