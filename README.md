@@ -87,7 +87,7 @@ This again passes all tests accept one. This time it's a colour blindness test (
 
 - The wireframe was made using AdobeXD and exported as a pdf file.
 
-[View](assets/readme/Don't get Angry.pdf)
+[View](https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/Don't%20get%20Angry.pdf)
 
 ## Technologies used
 
