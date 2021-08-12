@@ -4,7 +4,7 @@
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/amiresponcive.PNG" width="100%">
 
-The [Don't get Angry](https://nikolavk.github.io/don-t-get-angry/) game is based on a board game called "Ludo". This game is targeted to users that want a different experience of the board game and for people who dont own the board game but still want to play it. The game is playable againtst a computer or up to 4 people.
+The [Don't get Angry](https://nikolavk.github.io/don-t-get-angry/) game is based on a board game called "Ludo". This game is targeted to users that want a different experience of the board game and for people who don't own the board game but still want to play it. The game is playable against a computer or up to 4 people.
 
 ## UX
 
@@ -18,9 +18,9 @@ The [Don't get Angry](https://nikolavk.github.io/don-t-get-angry/) game is based
 
 3. To be able to play with friends/family
 
-4. To be able to play againtst a computer
+4. To be able to play against  a computer
 
-5. To be able to chose a colour 
+5. To be able to chose a color 
 
 6. To be able to insert a player name
 
@@ -28,7 +28,7 @@ The [Don't get Angry](https://nikolavk.github.io/don-t-get-angry/) game is based
 
 ### Player choise
 
-The player/players may chose between playing vs individual players, computer or to switch a player off. I gave all player 1 to 4 text the green colour due to some colours not being readable on the black background
+The player/players may chose between playing vs individual players, computer or to switch a player off. I gave all player 1 to 4 text the green color due to some colors not being readable on the black background
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/type-player.png" width="100%">
 
@@ -40,7 +40,7 @@ All buttons have a hover function to indicate when a user is hovering over one o
 
 ### Main menu
 
-The main menu returns the player back to the main menu
+The main menu button returns the player back to the main menu
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/menu-button.png" width="100%">
 
@@ -50,8 +50,8 @@ The main menu returns the player back to the main menu
 
 The fonts used for this site are Orbitron for the logo, the main menu and h1/h2 tags. Montserrat was used for the p tags with. Both these font's have a backup of "Sans-Serif":
 
-- I chose [Orbitron](https://fonts.google.com/specimen/Orbitron?query=Orbitron+) for it's modern bold design. The letters are very readable. This font-family is used for h1 and h2 tags
-- For the p tags I chose [Montserrat](https://fonts.google.com/specimen/Montserrat?query=Montserrat) for it fits well with "Orbitron". It's also very clearly visiable and modern.
+- I chose [Orbitron](https://fonts.google.com/specimen/Orbitron?query=Orbitron+) for its modern bold design. The letters are very readable. This font-family is used for h1 and h2 tags
+- For the p tags I chose [Montserrat](https://fonts.google.com/specimen/Montserrat?query=Montserrat) for it fits well with "Orbitron". It's also very clearly visible and modern.
 
 ### Icons
 
@@ -66,22 +66,22 @@ For this game I used 4 different colors:
 - Dark blue
 - Red
 
-This colours were chosen because of the type of game it is. I also tried to implement all colors across the page where that was possible for consistency
+This colors were chosen because of the type of game it is. I also tried to implement all colors across the page where that was possible for consistency
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/colour-scheme.PNG" width="100%">
 
-I also tested these colours with [Contrast Checker](https://contrastchecker.com/) where a user needs to click or read something
+I also tested these colors with [Contrast Checker](https://contrastchecker.com/) where a user needs to click or read something
 
 - White on red
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/wht-red.PNG" width="100%">
 
-This passes on all tests accept if font is lower tha 18px. However all buttons contain font over 18 pixels, they are all bold and the user gets a hover effect.
+This passes on all tests accept if font is lower than 18px. However, all buttons contain font over 18 pixels, they are all bold and the user gets a hover effect.
 
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/grn-blck.PNG" width="100%">
 
-This again passes all tests accept one. This time it's a colour blindness test (score must be 500 or above). This is only used on a font size 26px and all letters are bold. Also the user doesn't need to interact with these elements. They only indicate player 1 to 4.
+This again passes all tests accept one. This time it's a color blindness test (score must be 500 or above). This is only used on a font size 26px and all letters are bold. Also, the user doesn't need to interact with these elements. They only indicate player 1 to 4.
 
 ## Wireframes
 
