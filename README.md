@@ -28,7 +28,7 @@ The [Don't get Angry](https://nikolavk.github.io/don-t-get-angry/) game is based
 
 ### Player choise
 
-The player/players may chose between playing vs individual players, computer or to switch a player off
+The player/players may chose between playing vs individual players, computer or to switch a player off. I gave all player 1 to 4 text the green colour due to some colours not being readable on the black background
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/type-player.png" width="100%">
 
