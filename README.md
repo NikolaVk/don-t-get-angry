@@ -149,6 +149,8 @@ I tested the site on a 17.3 inch laptop, 23.6 inch screen, 10.1 inch tablet and 
 
 ### Known Bugs
 
+- I was unable to find and bugs
+
 ## Deployment
 
 ### Github pages
