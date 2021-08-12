@@ -1,4 +1,3 @@
-
 let game                = null;
 let scaling             = 80;
 let pawnPosSize         = 20;
@@ -610,7 +609,7 @@ function theGame(playfieldLayer, playerLayer)
 
                 // determine if there is a move which kills an oponent
                 let foundPawnIndex      = -1;
-                let oponentPawnsInHome  = 0;
+                let oponentPawnsInHome  =  0;
                 let pawnAtStart         = -1;
                 let pawnInHome          = -1;
                 let preferedPawnIndex   = -1;
@@ -794,7 +793,7 @@ function dice(parentElement)
                         this.animdirection      = 0 - this.animdirection;  
                     }
                     animScale           += this.animcounter * 0.01;
-                    setTimeout(function() {redrawDice()}, 50);
+                    setTimeout(function() {redrawDice();}, 50);
                 }
             else if (this.state > 0)
             {
@@ -940,7 +939,7 @@ function player(playerID, parentElement, playerName)
             }
             this.numDiceThrows          = 0;
  
-            }
+            };
 
         this.isPawnSelected         = function(pawnID)
         {
@@ -1044,7 +1043,7 @@ function player(playerID, parentElement, playerName)
             this.draw();
 
             return pawnSelected;
-       }
+       };
 
     this.getNewPawnPostion              = function(pawnIndex, dicevalue)
     {
@@ -1103,7 +1102,7 @@ function player(playerID, parentElement, playerName)
       {
         for (let freeWaitingSpot = 0; freeWaitingSpot < 4; freeWaitingSpot++)
             {    
-            let index;          ;
+            let index;          
             for (index = 0; index < 4; index++)
             {
                 if ((this.pawns[index].positionType == 3) && (this.pawns[index].position == (freeWaitingSpot + (this.playerindex * 4))))
@@ -1321,7 +1320,7 @@ function pawn(playerID, pawnIndex, parentElement)
             {
             this.state              = newState;
             this.draw();
-            }
+            };
   
   
   
@@ -1367,7 +1366,7 @@ function pawn(playerID, pawnIndex, parentElement)
             this.animDirection      = 1;
         }
 
-        pawnScaling         = pawnScale + (this.animCounter * pawnAnimSizeRatio);
+        let pawnScaling         = pawnScale + (this.animCounter * pawnAnimSizeRatio);
         this.el_element.setAttribute("transform", "translate(" + x + " " + y + ") scale(" + pawnScaling + " " + pawnScaling + ")");
 
 
