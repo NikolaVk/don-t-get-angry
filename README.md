@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/images/logo.png" alt="Don't get angry" aria-label="Don't get angry logo (opens in new tab)"
+    <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/images/logo.png" alt="Don't get angry" aria-label="Don't get angry logo (opens in new tab)">
 </div>
 
 <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/amiresponcive.PNG" width="100%">
