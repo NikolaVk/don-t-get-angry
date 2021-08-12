@@ -2,7 +2,7 @@
     <img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/images/logo.png" alt="Don't get angry" aria-label="Don't get angry logo (opens in new tab)">
 </div>
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/amiresponcive.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/amiresponcive.png" width="100%">
 
 The [Don't get Angry](https://nikolavk.github.io/don-t-get-angry/) game is based on a board game called "Ludo". This game is targeted to users that want a different experience of the board game and for people who don't own the board game but still want to play it. The game is playable against a computer or up to 4 people.
 
@@ -68,18 +68,18 @@ For this game I used 4 different colors:
 
 This colors were chosen because of the type of game it is. I also tried to implement all colors across the page where that was possible for consistency
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/colour-scheme.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/colour-scheme.png" width="100%">
 
 I also tested these colors with [Contrast Checker](https://contrastchecker.com/) where a user needs to click or read something
 
 - White on red
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/wht-red.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/wht-red.png" width="100%">
 
 This passes on all tests accept if font is lower than 18px. However, all buttons contain font over 18 pixels, they are all bold and the user gets a hover effect.
 
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/grn-blck.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/grn-blck.png" width="100%">
 
 This again passes all tests accept one. This time it's a color blindness test (score must be 500 or above). This is only used on a font size 26px and all letters are bold. Also, the user doesn't need to interact with these elements. They only indicate player 1 to 4.
 
@@ -136,16 +136,16 @@ I tested the site on a 17.3 inch laptop, 23.6 inch screen, 10.1 inch tablet and 
 
 - The HTML code was tested using the W3C validator
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/html-validator.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/html-validator.png" width="100%">
 
 
 - The CSS code was tested using the W3C CSS validator
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/css-validator.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/css-validator.png" width="100%">
 
 - The JavaScript was tested using Jshint
 
-<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/jshint.PNG" width="100%">
+<img src="https://github.com/NikolaVk/don-t-get-angry/blob/main/assets/readme/jshint.png" width="100%">
 
 ### Known Bugs
 
