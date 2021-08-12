@@ -10,18 +10,18 @@
 .layer 
 {
     position: absolute;
-    left:     0px;
-    right:    0px;
-    top:      0px;
-    bottom:   0px;
+    left:          0px;
+    right:         0px;
+    top:           0px;
+    bottom:        0px;
 }
 
 #background 
 {
-     width: 100%;
-    height: 100%;
+     width:              100%;
+    height:              100%;
     background-color: black;
-    position: fixed;
+    position:           fixed;
 }
 
 #gamefield 
@@ -41,72 +41,72 @@
 }
 .menu 
 {
-    display:                none;
+    display:                          none;
     background-color:     rgb(28,61,145);
-    top:                   -100%;
-    width:                  100%;
-    height:                 100%;
+    top:                             -100%;
+    width:                            100%;
+    height:                           100%;
     text-align: center;
 }
 
 #main 
 {
     background-color:       black;
-    height:                 100%;
-    width:                   51%;
-    margin:                 auto;
+    height:                    100%;
+    width:                      51%;
+    margin:                    auto;
 }
 
 .menu_active
 {
     display:                block;
-    top:                    0px;
-    transition:             top 1s;
-    transition-delay:       3s;
+    top:                      0px;
+    transition:            top 1s;
+    transition-delay:          3s;
 }
 
 .button_main
 {
-    width:                350px;
-    height:                90px;
-    margin-top:            35px;
+    width:                                      350px;
+    height:                                      90px;
+    margin-top:                                  35px;
     border:                 4px solid rgb(226,8,22);
-    border-radius:         50px;
-    background-color:    rgb(255, 255, 255);
-    font-size:             40px;
-    font-family:          "Orbitron","Sans-serif";
-    line-height:           2;
-    text-align:            center;
-    margin-left:             auto;
-    margin-right:            auto;
+    border-radius:                               50px;
+    background-color:            rgb(255, 255, 255);
+    font-size:                                   40px;
+    font-family:              "Orbitron","Sans-serif";
+    line-height:                                    2;
+    text-align:                                center;
+    margin-left:                                 auto;
+    margin-right:                                auto;
 }
 
 .button_main:hover
 {
     background-color:   rgb(226,8,22);
-    color:              white;
-    border:              4px solid white;
+    color:                      white;
+    border:           4px solid white;
 }
 
 .backbutton
 {
-    width:                250px;
-    height:                60px;
-    margin-top:            35px;
-    border:                 4px solid rgb(226,8,22);
+    width:                                   250px;
+    height:                                   60px;
+    margin-top:             	              35px;
+    border:              4px solid rgb(226,8,22);
     border-radius:         50px;
-    background-color:    rgb(255, 255, 255);
-    font-size:             30px;
-    font-family:          "Orbitron","Sans-serif";
-    line-height:           2;
-    text-align:            center;
-    margin-left:           100px;
+    background-color:         rgb(255, 255, 255);
+    font-size:                                30px;
+    font-family:           "Orbitron","Sans-serif";
+    line-height:                                 2;
+    text-align:                             center;
+    margin-left:                             100px;
 }
 
 .backbutton:hover
 {
-    background-color:   rgb(226,8,22);
-    color:              white;
+    background-color:      rgb(226,8,22);
+    color:                         white;
     border:              4px solid white;
 }
 
@@ -114,18 +114,18 @@
 .playerselectioncontainer
 {
 border-top-color:      rgb(85, 176, 48);
-border-top-width:        3px;
-border-top-style:        solid;
-height:                  90px;
+border-top-width:                     3px;
+border-top-style:                   solid;
+height:                              90px;
 }
 
 .playertitle
 {
-    color:            rgb(85, 176, 48);
-    font-size:          26px;
-    font-weight:        bold;
-    font-family:       "Orbitron","Sans-serif";
-    letter-spacing:     2px;
+    color:                rgb(85, 176, 48);
+    font-size:                          26px;
+    font-weight:                        bold;
+    font-family:     "Orbitron","Sans-serif";
+    letter-spacing:                      2px;
 }
 
 
@@ -142,17 +142,17 @@ height: 40px;
 .playerbuttons
 {
     display:        inline-block;
-    vertical-align: top;
-    width:          50px;
-    height:         100%;
+    vertical-align:          top;
+    width:                  50px;
+    height:                 100%;
 }
 
 .playerselbutton_selected
 {
-    background-color:   rgb(226,8,22);
+    background-color:      rgb(226,8,22);
     border-color:       rgb(84, 176, 48);
-    border-style:         solid;
-    border-width:         2px;
+    border-style:                    solid;
+    border-width:                      2px;
 }
 
 input{
@@ -161,13 +161,13 @@ input{
 }
 .playername
 {
-    vertical-align:     top;
-    display:            inline-block;
-    height:             100%;
-    border-width:       2px;
+    vertical-align:                    top;
+    display:                  inline-block;
+    height:                           100%;
+    border-width:                      2px;
     border-color:       rgb(84, 176, 48);  
-    border-style:       solid;
-    border-radius:      5px;
+    border-style:                    solid;
+    border-radius:                      5px;
 }
 
 .playername_disabled
@@ -191,14 +191,14 @@ input{
 
 #rules_text
 {
-    width:              55%;
-    height:             90%;
-    padding:            40px;
-    background-color: white;
-    color:            black;
+    width:                        55%;
+    height:                       90%;
+    padding:                     40px;
+    background-color:         white;
+    color:                    black;
     border:           red 2px solid;
-    border-radius:      50px;
-    margin: auto;
+    border-radius:               50px;
+    margin:                      auto;
 }
 
 #rules_text img
@@ -209,18 +209,18 @@ input{
 
 #rules_h1
 {
-    font-size:            30px;
+    font-size:                              30px;
     font-family:         "Orbitron","Sans-serif";
-    background-color:   rgb(226,8,22);
-    color:              white;
-    border:               4px solid white;
-    border-radius:        50px;
-    margin-top:          -20px;
+    background-color:            rgb(226,8,22);
+    color:                               white;
+    border:                    4px solid white;
+    border-radius:                          50px;
+    margin-top:                            -20px;
 }
 
 #rules_text h2
 {
-    font-size:         30px;
+    font-size:                            30px;
     font-family:       "Orbitron","Sans-serif";
 }
 
@@ -231,40 +231,40 @@ input{
 
 .back_button
 {
-    width:                150px;
-    height:                50px;
-    margin-top:            35px;
+    width:                                      150px;
+    height:                                      50px;
+    margin-top:                                  35px;
     border:                 4px solid rgb(226,8,22);
-    border-radius:         50px;
-    background-color:    rgb(255, 255, 255);
-    font-size:             30px;
-    font-family:          "Orbitron","Sans-serif";
-    line-height:           1.7;
-    float:                 left;
-    margin-left:           10px;
-    margin-top:            25px;
+    border-radius:                               50px;
+    background-color:            rgb(255, 255, 255);
+    font-size:                                   30px;
+    font-family:              "Orbitron","Sans-serif";
+    line-height:                                  1.7;
+    float:                                       left;
+    margin-left:                                 10px;
+    margin-top:                                  25px;
 }
 
 .back_button:hover
 {
-    background-color:   rgb(226,8,22);
-    color:              white;
+    background-color:      rgb(226,8,22);
+    color:                         white;
     border:              4px solid white;
 }
 
 .pop
     {
-        top:                10%;
-        width:              90%;
-        background-color: rgb(8,221,51);
-        min-height:       200px;
-        font-family:      "Orbiton", "Sans-serif";
-        font-size:         50px;
-        text-align:      center;
-        padding:           15px;
+        top:                                      10%;
+        width:                                    90%;
+        background-color:             rgb(8,221,51);
+        min-height:                             200px;
+        font-family:          "Orbiton", "Sans-serif";
+        font-size:                               50px;
+        text-align:                            center;
+        padding:                                 15px;
         border:             4px rgb(226,8,22) solid;
-        border-radius:      50px;
-        margin: auto;
+        border-radius:                           50px;
+        margin:                                  auto;
     }
 
 #wonpopup img
@@ -300,18 +300,18 @@ input{
 
         #rules_text
         {
-            width: 65%;
-            height: 80%;
-            overflow-y: scroll;
+            width:          65%;
+            height:         80%;
+            overflow-y:  scroll;
         }
 
         .backbutton
         {
-            height: 80px;
-            width: 220px;
-            margin-left: 50px;
-            font-size: 40px;
-            line-height: 1;
+            height:        80px;
+            width:        220px;
+            margin-left:   50px;
+            font-size:     40px;
+            line-height:      1;
         }
 
         #button_next
@@ -321,20 +321,20 @@ input{
 
         .pop
         {
-            width: 90%;
-            margin-left: 40px;
+            width:         90%;
+            margin-left:  40px;
         }
 
         #button_next
         {
-            width: 60%;
-            margin-left: 150px;
+            width:          60%;
+            margin-left:  150px;
         }
 
         #button_next
         {
-            width: 60%;
-            margin-left: 250px;
+            width:          60%;
+            margin-left:  250px;
         }
 
 
@@ -359,23 +359,23 @@ input{
 
         #rules_text
         {
-            height: 80%;
-            width: 80%;
+            height:  80%;
+            width:   80%;
         }
 
         .back_button
         {
-            margin-bottom: 20px;
-            height: 80px;
-            width: 250px;
-            font-size: 50px;
+            margin-bottom:  20px;
+            height:         80px;
+            width:         250px;
+            font-size:      50px;
         }
 
         .backbutton
         {
-            height: 75px;
-            width: 180px;
-            font-size: 35px;
+            height:       75px;
+            width:       180px;
+            font-size:    35px;
             margin-left:  30px;
         }
 
@@ -386,14 +386,14 @@ input{
 
         .pop
         {
-            width: 90%;
-            margin-left: 20px;
+            width:         90%;
+            margin-left:  20px;
         }
 
         #button_next
         {
-            width: 60%;
-            margin-left: 150px;
+            width:          60%;
+            margin-left:  150px;
         }
 
 
@@ -403,15 +403,15 @@ input{
     {
         .pop
         {
-            width: 100%;
-            margin-left: 20px;
-            margin-top: 20px;
+            width:        100%;
+            margin-left:  20px;
+            margin-top:   20px;
         }
 
         #button_next
         {
-            width: 60%;
-            margin-left: 60px;
+            width:         60%;
+            margin-left:  60px;
         }
     
     }
