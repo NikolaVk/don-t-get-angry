@@ -250,7 +250,7 @@ input{
 .pop
     {
         top:                10%;
-        width:              60%;
+        width:              90%;
         background-color: rgb(8,221,51);
         min-height:       200px;
         font-family:      "Orbiton", "Sans-serif";
@@ -270,19 +270,11 @@ input{
 
 #button_next
     {
-        margin-left: 400px;
+        margin-left: 700px;
     }
 
 @media (max-width:1650px) 
     {
-        .backbutton
-        {
-            width: 150px;
-            height: 50px;
-            font-size: 20px;
-            margin-left: 50px;
-        }
-
         .rules
         {
             width: 70%;
@@ -304,8 +296,43 @@ input{
         #rules_text
         {
             width: 65%;
+            height: 80%;
             overflow-y: scroll;
         }
+
+        .backbutton
+        {
+            height: 80px;
+            width: 220px;
+            margin-left: 50px;
+            font-size: 40px;
+            line-height: 1;
+        }
+
+        #button_next
+        {
+            margin-left: 200px;
+        }
+
+        .pop
+        {
+            width: 90%;
+            margin-left: 40px;
+        }
+
+        #button_next
+        {
+            width: 60%;
+            margin-left: 150px;
+        }
+
+        #button_next
+        {
+            width: 60%;
+            margin-left: 250px;
+        }
+
+
     }
 
 @media (max-width:950px) 
@@ -319,4 +346,68 @@ input{
         {
             width: 100%;
         }
+
+        #rules_panel
+        {
+            overflow-y: scroll;
+        }
+
+        #rules_text
+        {
+            height: 80%;
+            width: 80%;
+        }
+
+        .back_button
+        {
+            margin-bottom: 20px;
+            height: 80px;
+            width: 250px;
+            font-size: 50px;
+        }
+
+        .backbutton
+        {
+            height: 75px;
+            width: 180px;
+            font-size: 35px;
+            margin-left:  30px;
+        }
+
+        #button_next
+        {
+            margin-left: 70px;
+        }
+
+        .pop
+        {
+            width: 100%;
+            margin-left: 20px;
+        }
+
+        #button_next
+        {
+            width: 60%;
+            margin-left: 150px;
+        }
+
+
     }
+
+@media (max-width:400px) 
+    {
+        .pop
+        {
+            width: 100%;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+
+        #button_next
+        {
+            width: 60%;
+            margin-left: 60px;
+        }
+    
+    }
+
