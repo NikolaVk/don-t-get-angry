@@ -165,7 +165,7 @@ input{
     display:            inline-block;
     height:             100%;
     border-width:       2px;
-    border-color:       "grey";  
+    border-color:       rgb(84, 176, 48);  
     border-style:       solid;
     border-radius:      5px;
 }
